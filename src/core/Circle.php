@@ -20,7 +20,8 @@ class Circle extends Shape {
      * @return area of the shape
      */
     public function getArea() {
-        return pow($this->radius,2) * M_PI;
+        $result = pow($this->radius,2) * M_PI;
+        return round($result, 2);
     }
 
     /**

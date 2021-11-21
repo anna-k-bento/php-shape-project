@@ -13,3 +13,6 @@ Where Shape class is a parent for Rectangle and Circle. It was not defined as ab
 
 .src\utils
 ObjectWatcher.php - class to control generated id's and other properties, make sure no id duplication occures.
+
+.src\css
+Css files
