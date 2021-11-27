@@ -11,6 +11,7 @@ class Circle extends Shape {
      * Constructor
      */
     public function __construct(int $radius = 0){
+        $this->checkNum($radius);
         $this->radius = $radius;
         parent::__construct();
     }

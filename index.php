@@ -4,7 +4,8 @@
 	include 'src/core/Circle.php';
 	
 	$width = $length = $radius = $total = $selectedShape = "";
-	$shapeToCalc = new Shape(); 
+	$shapeToCalc;
+	$argumentExceptionMsg = ""; 
   
 	if(isset($_POST['submit'])){
 		
@@ -14,20 +15,33 @@
 		if($selectedShape == 'circle'){
 			if(is_numeric($_POST['radius'])){
 				$radius = $_POST['radius'];
-				$shapeToCalc = new Circle($radius);
+				try {
+					$shapeToCalc = new Circle($radius);
+				} catch(InvalidArgumentException $err){
+					$argumentExceptionMsg = $err->getMessage();
+				}
+
+				
 			}
 		} else if(is_numeric($_POST['width']) && is_numeric($_POST['length'])){
 		
 			$width = $_POST['width'];
 			$length = $_POST['length'];
+			
+			try {
 				
-			if($selectedShape == 'rectangle') {
-				$shapeToCalc = new Rectangle($width, $length);
-			} else {
-				$shapeToCalc = new Shape($width, $length);
+				if($selectedShape == 'rectangle') {
+					$shapeToCalc = new Rectangle($width, $length);
+				} else {
+					$shapeToCalc = new Shape($width, $length);
+				}
+			} catch(InvalidArgumentException $err){
+				$argumentExceptionMsg =  $err->getMessage();
 			}
+
 		}
-	if(!empty($selectedShape)){
+	if(!empty($selectedShape) && !empty($shapeToCalc)){
+		$argumentExceptionMsg = "";
 		$total = $shapeToCalc->getArea();
 	}
   }
@@ -36,32 +50,29 @@
   <head>
   <link href="css/main.css" type="text/css" rel="stylesheet" />
    <script  type="text/javascript">
+   
+		const circleElemIds_array = ["circle","totalCircle", "errCircle"];
+  const shapeElemIds_array = ["shape","totalShape", "errShape"];
+ const rectElemIds_array = ["shape","totalRect", "errRect"];
+ const elements_obj= {"circle": circleElemIds_array, "shape": shapeElemIds_array, "rectangle": rectElemIds_array};
+  
    /**
    * Show attributes in function of the selected shape
    * @param shapes -selected shape
    **/
 	function showAttributes(shapes) {
+ 
 		if(!shapes){
 		  shapes = document.getElementById("shapes").value;
 		}
-		document.getElementById("circle").style.display = 'none';
-		document.getElementById("shape").style.display = 'none';
-		document.getElementById("totalCircle").style.display = 'none';
-		document.getElementById("totalShape").style.display = 'none';
-		document.getElementById("totalRect").style.display = 'none';
-		if (shapes == "circle") {
-			document.getElementById("circle").style.display = 'block';
-			document.getElementById("totalCircle").style.display = 'block';
-		} 
-		if (shapes == "shape") {
-			document.getElementById("shape").style.display = 'block';
-			document.getElementById("totalShape").style.display = 'block';
+		// first hide all elements
+		for(var key in elements_obj){
+			elements_obj[key].forEach((x,i) => document.getElementById(x).style.display = 'none');
 		}
-		if (shapes == "rectangle") {
-			document.getElementById("shape").style.display = 'block';
-			document.getElementById("totalRect").style.display = 'block';
-		}
-
+		// since two of the options use the same element show the active one
+		elements_obj[shapes].forEach((x,i) => document.getElementById(x).style.display = 'block');
+		
+		//verify button state
 		activateButton();
 	}	
 	
@@ -111,6 +122,15 @@
 				<input class="input-field"  oninput="activateButton();" type ="number" name="radius" id="radius" value=<?php echo $radius; ?> />
 			</div>
 		</div>
+		<div class ="row" id="errCircle">
+			<label class="err-msg-field"> <?php if($selectedShape == "circle") echo $argumentExceptionMsg; ?> </label>
+		</div>
+		<div class ="row" id="errRect">
+			<label class="err-msg-field"> <?php if($selectedShape == "rectangle") echo $argumentExceptionMsg; ?> </label>
+		</div>
+		<div class ="row" id="errShape">
+			<label class="err-msg-field"> <?php if($selectedShape == "shape") echo $argumentExceptionMsg; ?> </label>
+		</div>
 		<input type="submit" name="submit" id="calc" disabled= false value ="CALCULATE AREA" class="btn-submit responsive" /> 
 		<div class="row responsive">  
 			<div id="totalCircle" style="display: none">
@@ -126,6 +146,7 @@
 				<input class="total-field" type ="number" id="totalS" value=<?php  if($selectedShape == "shape") echo $total; ?> readonly />
 			</div>
 		</div>
+
     </form>
 </body>
 </html>

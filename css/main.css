@@ -67,6 +67,14 @@ body {
     margin: 10px;
 }
 
+.err-msg-field{
+    width: 340px;
+    padding: 5px;
+    margin: 5px 10px 0px 0px;
+    border: #ffffff 0px solid;
+    color: #f13636;
+}
+
 @media only screen and (max-width: 500px) {
   .inline-block {
     display: block;

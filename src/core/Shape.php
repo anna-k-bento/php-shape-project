@@ -33,6 +33,10 @@ class Shape {
      * @param $length
      */
     public function __construct(int $width = 0, int $length = 0){
+        
+        $this->checkNum($width);
+        $this->checkNum($length);
+        
         $this->width = $width;
         $this->length = $length;
         $this->name = get_called_class();
@@ -82,6 +86,12 @@ class Shape {
                     , 'width'=> $this->width
                     , 'length'=> $this->length
                     , 'id' => $this->id]);
+    }
+
+    public function checkNum(int $number) {
+        if($number < 0){
+            throw new InvalidArgumentException("Argument cannot be less than 0");
+        }
     }
 
 }
