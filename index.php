@@ -2,17 +2,20 @@
 	include 'src/core/Shape.php';
 	include 'src/core/Rectangle.php';
 	include 'src/core/Circle.php';
+	include_once 'src/utils/ObjectWatcher.php';
+	include_once 'src/enum/StrategyConstants.php';
 	
 	$width = $length = $radius = $total = $selectedShape = "";
 	$shapeToCalc;
 	$argumentExceptionMsg = ""; 
-  
+
 	if(isset($_POST['submit'])){
 		
 		$width = $length = $total = $radius = "";
 		$selectedShape = $_POST['shapes'];
 		
 		if($selectedShape == 'circle'){
+			ObjectWatcher::changeStrategy(StrategyConstants::SPL);
 			if(is_numeric($_POST['radius'])){
 				$radius = $_POST['radius'];
 				try {
@@ -29,7 +32,7 @@
 			$length = $_POST['length'];
 			
 			try {
-				
+				ObjectWatcher::changeStrategy(StrategyConstants::UNIQUE);
 				if($selectedShape == 'rectangle') {
 					$shapeToCalc = new Rectangle($width, $length);
 				} else {
@@ -40,6 +43,7 @@
 			}
 
 		}
+
 	if(!empty($selectedShape) && !empty($shapeToCalc)){
 		$argumentExceptionMsg = "";
 		$total = $shapeToCalc->getArea();

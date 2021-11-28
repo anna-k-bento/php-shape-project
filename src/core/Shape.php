@@ -1,5 +1,6 @@
 <?php
-include __DIR__ . '/../utils/ObjectWatcher.php';
+include_once __DIR__ . '/../utils/ObjectWatcher.php';
+
 /**
  * Shape clas
  */
@@ -27,6 +28,7 @@ class Shape {
      */
     private string $id;
 
+
     /**
      * Constructor
      * @param $width
@@ -41,7 +43,8 @@ class Shape {
         $this->length = $length;
         $this->name = get_called_class();
         //generate id
-        $this->id = spl_object_hash($this);
+        $this->id = ObjectWatcher::getStrategy()->generateId($this);
+        
         //add generated id to the watcher
         ObjectWatcher::add($this);
 
