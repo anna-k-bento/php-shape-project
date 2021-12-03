@@ -2,7 +2,7 @@
 include_once __DIR__ . '/../utils/ObjectWatcher.php';
 
 /**
- * Shape clas
+ * Shape class
  */
 class Shape {
 
@@ -42,12 +42,12 @@ class Shape {
         $this->width = $width;
         $this->length = $length;
         $this->name = get_called_class();
+
         //generate id
         $this->id = ObjectWatcher::getStrategy()->generateId($this);
         
         //add generated id to the watcher
         ObjectWatcher::add($this);
-
         
     }     
 
@@ -72,6 +72,7 @@ class Shape {
         }
         
     }
+
     /**
      * Get area
      * @return area of the shape
@@ -91,6 +92,10 @@ class Shape {
                     , 'id' => $this->id]);
     }
 
+    /**
+     * Method checking if value isn't less than 0
+     * @param $number
+     */
     public function checkNum(int $number) {
         if($number < 0){
             throw new InvalidArgumentException("Argument cannot be less than 0");

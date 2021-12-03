@@ -1,5 +1,9 @@
 <?php
+/**
+ * Circle class
+ */
 class Circle extends Shape {
+    
     public const TYPE = 3;
     
     /**
@@ -9,6 +13,7 @@ class Circle extends Shape {
     
     /**
      * Constructor
+     * @param $radius
      */
     public function __construct(int $radius = 0){
         $this->checkNum($radius);

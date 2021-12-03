@@ -2,55 +2,71 @@
 Sample OOP PHP project
 =======================
 
-Sample project created using object inheritance.
+PHP project with object inheritance.
 
-Project structure
----------------
+Structure
+----------------
 
-Source files are placed in \src folder.
-.src\core - folder contains three classes 
-Shape.php
-|-> Rectangle.php
-|-> Circle.php
+.\src\core
+ - Shape.php
+ - Rectangle.php - extends Shape.php
+ - Circle.php - extends Shape.php
 
-The Shape class is a parent for Rectangle and Circle classes.
-The Shape class is not abstract, so it is possible to create an instance of this type. 
+.\src\enum
+ - StrategyConstants.php - Enumeration class
 
-.src\enum
-Enumeration classes.
+.\src\utils
+- ObjectWatcher.php - 	controls id generation and ensures there are no duplications. It handles the execution of the selected strategy for id generation. 
+- strategy\IStrategy.php - Interface for strategies that implements id generation
+- strategy\SplObjectStrategy.php - implements IStrategy.php
+- strategy\UniqueIdStrategy.php - implements IStrategy.php
 
-.src\utils
-ObjectWatcher.php - class to control generated id's and other properties, make sure no id duplication occurs.
-It handles strategy for ID creation. It is possible to redefine the currently used strategy by setting:
-ObjectWatcher::changeStrategy(string $type)
-where $type should correspond to one of the defined StrategyConstants.
-Currently:
-ShapeConstants::UNIQUE - generate id using uniqid()
-ShapeConstants::SPL - generate id using spl_object_hash()
-To add a new strategy:
-	- a new class implementing src\utils\strategy IStrategy should be created with pretended algorithm
-- new ShapeConstants should be defined
-- new case should be added in ObjectWatcher::changeStrategy method
-
-.src\css
-Css files
+.\css
+- main.css - Css files
 
 .\tests
 Unit tests for PHP
-ShapeTest.php - test of area creation method for Shape, Rectangle, and Circle classes
-ShapeExceptionTest.php - test of exceptions when a negative value was used for object creation
+- ShapeTest.php - tests for area calculation methods
+- ShapeExceptionTest.php - tests for exceptions that are thrown when a negative value is used for object creation
 
-Tests
+.\index.php
+
+Run in Docker
 ---------------
 
-Clone repository and then run Composer:-
-
+1. Clone repository https://github.com/anna-k-bento/php-shape-project to selected local folder
+2. Make sure you have Docker installed and running
+3. Navigate to the selected folder
+4. Run
 ```
-composer install
+docker-compose up
 ```
+5. Open browser and navigate to http://localhost/
 
-Run the unit tests using:-
+PHPUnit tests
+---------------
 
+1. Please follow the steps (4) described in "Run in Docker" section.
+2. Enter container using command:
+```
+docker exec -i -t shapesapp-app sh
+```
+3. To execute all tests run
 ```
 ./vendor/bin/phpunit tests
 ```
+
+Additional feature
+----------------
+It is possible to redefine the currently used strategy for id generation by setting in index.php:
+```
+ObjectWatcher::changeStrategy(string $type)
+```
+where $type should correspond to one of the defined StrategyConstants:
+ * ShapeConstants::UNIQUE - generate id using uniqid()
+ * ShapeConstants::SPL - generate id using spl_object_hash()
+ 
+In order to add a new strategy:
+- create a new class with pretended algorithm and implementing src\utils\strategy\IStrategy.php
+- define a new constant in StrategyConstants.php
+- add new case in ObjectWatcher::changeStrategy method

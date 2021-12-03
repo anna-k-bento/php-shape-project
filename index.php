@@ -15,55 +15,64 @@
 		$selectedShape = $_POST['shapes'];
 		
 		if($selectedShape == 'circle'){
-			ObjectWatcher::changeStrategy(StrategyConstants::SPL);
+
 			if(is_numeric($_POST['radius'])){
+				
 				$radius = $_POST['radius'];
+				
 				try {
+							
+					//define strategy
+					ObjectWatcher::changeStrategy(StrategyConstants::SPL);
 					$shapeToCalc = new Circle($radius);
+				
 				} catch(InvalidArgumentException $err){
 					$argumentExceptionMsg = $err->getMessage();
 				}
-
-				
 			}
+
 		} else if(is_numeric($_POST['width']) && is_numeric($_POST['length'])){
 		
 			$width = $_POST['width'];
 			$length = $_POST['length'];
 			
 			try {
+				
+				//define strategy
 				ObjectWatcher::changeStrategy(StrategyConstants::UNIQUE);
+				
 				if($selectedShape == 'rectangle') {
 					$shapeToCalc = new Rectangle($width, $length);
 				} else {
 					$shapeToCalc = new Shape($width, $length);
 				}
+			
 			} catch(InvalidArgumentException $err){
 				$argumentExceptionMsg =  $err->getMessage();
 			}
-
 		}
 
-	if(!empty($selectedShape) && !empty($shapeToCalc)){
-		$argumentExceptionMsg = "";
-		$total = $shapeToCalc->getArea();
-	}
-  }
+		// if there is shape selected and and information filled in than calculate area
+		if(!empty($selectedShape) && !empty($shapeToCalc)){
+			$argumentExceptionMsg = "";
+			$total = $shapeToCalc->getArea();
+		}
+  	}
 ?>
 <html>
   <head>
   <link href="css/main.css" type="text/css" rel="stylesheet" />
    <script  type="text/javascript">
    
-		const circleElemIds_array = ["circle","totalCircle", "errCircle"];
-  const shapeElemIds_array = ["shape","totalShape", "errShape"];
- const rectElemIds_array = ["shape","totalRect", "errRect"];
- const elements_obj= {"circle": circleElemIds_array, "shape": shapeElemIds_array, "rectangle": rectElemIds_array};
+	const circleElemIds_array = ["circle","totalCircle", "errCircle"];
+  	const shapeElemIds_array = ["shape","totalShape", "errShape"];
+ 	const rectElemIds_array = ["shape","totalRect", "errRect"];
+ 	const elements_obj= {"circle": circleElemIds_array, "shape": shapeElemIds_array, "rectangle": rectElemIds_array};
   
    /**
    * Show attributes in function of the selected shape
    * @param shapes -selected shape
-   **/
+   */
 	function showAttributes(shapes) {
  
 		if(!shapes){
@@ -84,15 +93,17 @@
 	* Activates button to calculate area
 	**/
 	function activateButton() {
-	  var shapes = document.getElementById("shapes").value;
-	  var width  = (shapes == "rectangle" || shapes == "shape") ? document.getElementById("width").value : "";
-	  var length = (shapes == "rectangle" || shapes == "shape") ? document.getElementById("length").value : "";
-	  var radius = (shapes == "circle") ? document.getElementById("radius").value : "";
-	  if((width != null && width != "" && length != null && length != "") || (radius != null && radius != "")){
-		document.getElementById("calc").disabled = false;
-	  } else {
-		document.getElementById("calc").disabled = true;
-	  }
+	
+		var shapes = document.getElementById("shapes").value;
+	  	var width  = (shapes == "rectangle" || shapes == "shape") ? document.getElementById("width").value : "";
+	  	var length = (shapes == "rectangle" || shapes == "shape") ? document.getElementById("length").value : "";
+	  	var radius = (shapes == "circle") ? document.getElementById("radius").value : "";
+	  	
+		if((width != null && width != "" && length != null && length != "") || (radius != null && radius != "")){
+			document.getElementById("calc").disabled = false;
+	  	} else {
+			document.getElementById("calc").disabled = true;
+	  	}
 	}
 </script>
 <title> PHP SHAPE Class </title>
